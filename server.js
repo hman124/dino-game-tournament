@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const app = express();
 const fs = require("fs");
 const users = require("./users.js");
+const db = require("./database.js");
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -15,7 +17,8 @@ app.get("/", (request, response) => {
 app.get("/api/newGame", (req, res) => {});
 
 app.get("/api/newUser", async (req, res) => {
-  let exists = await users.gameExists(req.query.gamePin);
+  //let exists = await users.gameExists(req.query.gamePin);
+  var exists = true;
   if (exists) {
     let user = new users.User(req.query.user, req.query.gamePin);
     user.insertDb();
@@ -26,7 +29,7 @@ app.get("/api/newUser", async (req, res) => {
 });
 
 app.get("/api/Listdb", async (req, res) => {
-  let data = await users.db.list();
+  let data = await db.list();
   res.send(data);
 });
 

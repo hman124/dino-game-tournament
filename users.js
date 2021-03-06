@@ -10,27 +10,29 @@ class User {
       data => {
         if (data.length) {
           this.gameUsers = data.numUsers;
+        } else {
+          this.gameUsers = 0;
         }
       }
     );
   }
   insertDb() {
     db.run(
-      "Insert Into Users (userId, screenName, currentGame) Values (?,?,?)"[
-        (this.userId, this.screenName, this.currentGame)
-      ]
+      "Insert Into Users (userId, screenName, currentGame) Values (?,?,?)",
+      [this.userId, this.screenName, this.currentGame]
     );
-    db.run(
-      "Insert Into Games (numUsers) Where gamePin=? Values (?)",
-      this.currentGame,
-      this.gameUsers + 1
-    );
+    db.run("Update Games Set numUsers=? Where gamePin=?", [
+      this.gameUsers + 1,
+      this.currentGame
+    ]);
   }
 }
 
 async function gameExists(gamePin) {
-  let data = await db.first("Select gamePin From Games Where gamePin=?", [gamePin]);
-  if(data.length) {
+  let data = await db.first("Select gamePin From Games Where gamePin=?", [
+    gamePin
+  ]);
+  if (data.length) {
     return true;
   } else {
     return false;
