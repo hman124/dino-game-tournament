@@ -22,13 +22,14 @@ app.get("/api/newGame", (req, res) => {
   res.send(game);
 });
 
-app.get("/api/newUser", async (req, res) => {
+app.get("/game/join", async (req, res) => {
   let exists = await users.gameExists(req.query.gamePin);
   //var exists = true;
   if (exists) {
     let user = new users.User(req.query.user, req.query.gamePin);
     user.insertDb();
-    res.send(user);
+    res.cookie("gamePin", user.currentGame);
+    res.redirect(307, "/game/wait");
   } else {
     res.send("Game Doesn't Exist");
   }
@@ -40,8 +41,21 @@ app.get("/api/Listdb", async (req, res) => {
 });
 
 app.get("/game/wait", async (req, res) => {
-  let data = await db.list();
-  res.send(data);
+  let data = await users.gameState(req.cookies.gamePin);
+  if (!data) {
+    res.send(data);
+  } else {
+    res.redirect(307, "/game/play");
+  }
+});
+
+app.get("/game/play", async (req, res) => {
+  let data = await users.gameState(req.cookies.gamePin);
+  if (data) {
+    res.send(data);
+  } else {
+    res.redirect(307, "/game/wait");
+  }
 });
 
 // listen for requests :)
