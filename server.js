@@ -60,6 +60,10 @@ app.get("/game/play", async (req, res) => {
   }
 });
 
+app.get("/api/cleardb", async (req, res) => {
+db.run("Delete From Games Where 1");
+  res.send("hi");
+});
 // listen for requests :)
 var listener = app.listen(process.env.PORT, () => {
   console.log(`Your app is listening on port ${listener.address().port}`);

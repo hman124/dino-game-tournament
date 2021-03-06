@@ -18,6 +18,7 @@ db.serialize(() => {
 });
 
 function dbAll(query, stmts) {
+  if(!stmts) { stmts = []; }
   return new Promise((res, rej) => {
     db.all(query, ...stmts, (err, rows) => {
       if (err) {
@@ -30,31 +31,34 @@ function dbAll(query, stmts) {
 }
 
 function dbRun(query, stmts) {
+  if(!stmts) { stmts = []; }
   return new Promise((res, rej) => {
-    db.run(query, ...stmts, (err) => {
-      if(err) {
+    db.run(query, ...stmts, err => {
+      if (err) {
         rej(err);
       } else {
         res();
       }
-    })
+    });
   });
 }
 
 function dbFirst(query, stmts) {
-  return new Promise(async (res, rej) => {
-  let data = await db.all(query, ...stmts).catc;
-    if(data.length) {
-      res(data[0]);
-    } else {
-      res([]);
-    }
+  if(!stmts) { stmts = []; }
+  return new Promise((res, rej) => {
+    db.all(query, ...stmts, (err, rows) => {
+      if(rows) {
+        console.log(rows + " | " + rows.length);
+        res(rows);
+      } else {
+        res("nose");
+      }
+    });
   });
 }
 
 async function dbList() {
- return await dbAll("Select * From Games",[]);
-  
+  return await dbAll("Select * From Games", []);
 }
 
 module.exports = {
@@ -62,4 +66,4 @@ module.exports = {
   all: dbAll,
   first: dbFirst,
   list: dbList
-}
+};

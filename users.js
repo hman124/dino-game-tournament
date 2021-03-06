@@ -6,11 +6,10 @@ class User {
     this.userId = crypto.randomBytes(8).toString("hex");
     this.screenName = screenName;
     this.currentGame = currentGame;
-    console.log("START");
     db.first("Select numUsers From Games Where gamePin=?", [this.gamePin]).then(
       data => {
+        console.log(data);
         this.gameUsers = parseInt(data.numUsers);
-        console.log("END");
       }
     );
   }
