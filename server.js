@@ -17,7 +17,7 @@ app.get("/api/newGame", (req, res) => {
 });
 
 app.get("/api/newUser", async (req, res) => {
-  let user = await new users.User();
+  let user = new users.User("hman", "gt7ygrtyh");
   res.send(user);
 });
 

@@ -59,5 +59,6 @@ function dbFirst(query, stmts) {
 
 module.exports = {
   run: dbRun,
-  all: dbAll
+  all: dbAll,
+  first: dbFirst
 }
