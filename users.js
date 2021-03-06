@@ -6,14 +6,6 @@ class User {
     this.userId = crypto.randomBytes(8).toString("hex");
     this.screenName = screenName;
     this.currentGame = currentGame;
-    if (this.currentGame) {
-      db.first("Select numUsers From Games Where gamePin=?", [
-        this.currentGame
-      ]).then(data => {
-        this.gameUsers = data.numUsers;
-        console.log(data.numUsers);
-      });
-    }
   }
   insertDb() {
     db.run(
@@ -21,8 +13,8 @@ class User {
       [this.userId, this.screenName, this.currentGame]
     );
     if (this.currentGame) {
-      db.run("Update Games Set numUsers=? Where gamePin=?", [
-        this.gameUsers + 1,
+      console.log(typeof this.gameUsers);
+      db.run("Update Games Set numUsers=numUsers+1 Where gamePin=?", [
         this.currentGame
       ]);
     }

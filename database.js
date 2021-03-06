@@ -13,7 +13,7 @@ db.serialize(() => {
       "CREATE TABLE Users (userId TEXT, screenName TEXT, currentGame TEXT)"
     );
   } else {
-    console.log("Database ready to go!");
+  //  console.log("Database ready to go!");
   }
 });
 

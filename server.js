@@ -66,5 +66,5 @@ db.run("Delete From Games Where 1");
 });
 // listen for requests :)
 var listener = app.listen(process.env.PORT, () => {
-  console.log(`Your app is listening on port ${listener.address().port}`);
+  //console.log(`Your app is listening on port ${listener.address().port}`);
 });
