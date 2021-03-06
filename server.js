@@ -45,7 +45,7 @@ app.get("/api/listdb", async (req, res) => {
 app.get("/game/wait", async (req, res) => {
   let data = await users.gameState(req.cookies.gamePin);
   if (!data) {
-    res.send(data);
+    res.sendFile(__dirname + "/views/" + folderName + "/wait.html");
   } else {
     res.redirect(307, "/game/play");
   }
