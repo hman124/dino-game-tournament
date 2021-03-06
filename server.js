@@ -12,13 +12,22 @@ app.get("/", (request, response) => {
   response.sendFile(`${__dirname}/views/index.html`);
 });
 
-app.get("/api/newGame", (req, res) => {
-  
-});
+app.get("/api/newGame", (req, res) => {});
 
 app.get("/api/newUser", async (req, res) => {
-  let user = new users.User("hman", "gt7ygrtyh");
-  res.send(user);
+  let exists = await users.gameExists(req.query.gamePin);
+  if (exists) {
+    let user = new users.User(req.query.user, req.query.gamePin);
+    user.insertDb();
+    res.send(user);
+  } else {
+    res.send("Game Doesn't Exist");
+  }
+});
+
+app.get("/api/Listdb", async (req, res) => {
+  let data = await users.db.list();
+  res.send(data);
 });
 
 // listen for requests :)

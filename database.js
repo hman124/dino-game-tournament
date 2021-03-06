@@ -1,4 +1,4 @@
-const dbFile = "./.data/sqlite.db";
+const dbFile = "./.data/gamev1.db";
 const fs = require("fs");
 const exists = fs.existsSync(dbFile);
 const sqlite3 = require("sqlite3").verbose();
@@ -57,8 +57,14 @@ function dbFirst(query, stmts) {
   });
 }
 
+async function dbList() {
+ return await dbAll("Select * From *");
+  
+}
+
 module.exports = {
   run: dbRun,
   all: dbAll,
-  first: dbFirst
+  first: dbFirst,
+  list: dbList
 }
