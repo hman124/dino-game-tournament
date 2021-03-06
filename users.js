@@ -6,14 +6,11 @@ class User {
     this.userId = crypto.randomBytes(8).toString("hex");
     this.screenName = screenName;
     this.currentGame = currentGame;
+    console.log("START");
     db.first("Select numUsers From Games Where gamePin=?", [this.gamePin]).then(
       data => {
-          console.log(data);
-        if (data.length) {
-          this.gameUsers = parseInt(data.numUsers);
-        } else {
-          this.gameUsers = 0;
-        }
+        this.gameUsers = parseInt(data.numUsers);
+        console.log("END");
       }
     );
   }
@@ -22,10 +19,12 @@ class User {
       "Insert Into Users (userId, screenName, currentGame) Values (?,?,?)",
       [this.userId, this.screenName, this.currentGame]
     );
-    db.run("Update Games Set numUsers=? Where gamePin=?", [
-      this.gameUsers + 1,
-      this.currentGame
-    ]);
+    if (!!this.currentGame) {
+      db.run("Update Games Set numUsers=? Where gamePin=?", [
+        this.gameUsers + 1,
+        this.currentGame
+      ]);
+    }
   }
 }
 

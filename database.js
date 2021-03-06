@@ -42,19 +42,13 @@ function dbRun(query, stmts) {
 }
 
 function dbFirst(query, stmts) {
-  return new Promise((res, rej) => {
-    db.all(query, ...stmts, (err, rows) => {
-      if(err) {
-        rej(err);
-      } else {
-        console.log(rows);
-        if(rows.length) {
-          res(rows[0]);          
-        } else {
-          res([]);
-        }
-      }
-    })
+  return new Promise(async (res, rej) => {
+  let data = await db.all(query, ...stmts).catc;
+    if(data.length) {
+      res(data[0]);
+    } else {
+      res([]);
+    }
   });
 }
 
