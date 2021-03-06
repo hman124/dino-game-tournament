@@ -64,5 +64,6 @@ async function gameState(gamePin) {
 module.exports = {
   User: User,
   Game: Game,
-  gameExists: gameExists
+  gameExists: gameExists,
+  gameState: gameState
 };

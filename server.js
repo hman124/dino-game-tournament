@@ -4,7 +4,9 @@ const app = express();
 const fs = require("fs");
 const users = require("./users.js");
 const db = require("./database.js");
+const cookieParser = require("cookie-parser");
 
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -41,6 +43,7 @@ app.get("/api/Listdb", async (req, res) => {
 });
 
 app.get("/game/wait", async (req, res) => {
+  console.log(req.cookies);
   let data = await users.gameState(req.cookies.gamePin);
   if (!data) {
     res.send(data);
