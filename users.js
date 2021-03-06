@@ -8,8 +8,9 @@ class User {
     this.currentGame = currentGame;
     db.first("Select numUsers From Games Where gamePin=?", [this.gamePin]).then(
       data => {
+          console.log(data);
         if (data.length) {
-          this.gameUsers = data.numUsers;
+          this.gameUsers = parseInt(data.numUsers);
         } else {
           this.gameUsers = 0;
         }
@@ -35,7 +36,7 @@ class Game {
   }
   insertDb() {
     db.run(
-      "Insert Into Games (hostId, gamePin, numUsers, isStarted) Values (?,?,0,false)",
+      "Insert Into Games (hostId, gamePin, numUsers, isStarted) Values (?,?,1,false)",
       [this.hostId, this.gamePin]
     );
     db.run("Update Users Set currentGame=? Where userId=?", [
@@ -49,7 +50,6 @@ async function gameExists(gamePin) {
   let data = await db.first("Select gamePin From Games Where gamePin=?", [
     gamePin
   ]);
-  console.log(data);
   return !!data.gamePin;
 }
 
@@ -57,8 +57,15 @@ async function gameState(gamePin) {
   let data = await db.first("Select isStarted From Games Where gamePin=?", [
     gamePin
   ]);
-  console.log(data);
   return !!parseInt(data.isStarted);
+}
+
+async function isHost(userId, gamePin) {
+  let data = await db.first(
+    "Select * From Games Where hostId=? AND gamePin=?",
+    [userId, gamePin]
+  );
+  return !!data;
 }
 
 module.exports = {

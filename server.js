@@ -37,13 +37,12 @@ app.get("/game/join", async (req, res) => {
   }
 });
 
-app.get("/api/Listdb", async (req, res) => {
+app.get("/api/listdb", async (req, res) => {
   let data = await db.list();
   res.send(data);
 });
 
 app.get("/game/wait", async (req, res) => {
-  console.log(req.cookies);
   let data = await users.gameState(req.cookies.gamePin);
   if (!data) {
     res.send(data);

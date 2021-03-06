@@ -47,6 +47,7 @@ function dbFirst(query, stmts) {
       if(err) {
         rej(err);
       } else {
+        console.log(rows);
         if(rows.length) {
           res(rows[0]);          
         } else {
