@@ -29,6 +29,23 @@ class User {
   }
 }
 
+class Game {
+  constructor(user) {
+    this.hostId = user.userId;
+    this.gamePin = crypto.randomBytes(2).toString("hex");
+  }
+  insertDb() {
+    db.run(
+      "Insert Into Games (hostId, gamePin, numUsers, isStarted) Values (?,?,0,false)",
+      [this.hostId, this.gamePin]
+    );
+    db.run(
+      "Update Users Set currentGame=? Where userId=?",
+      [this.gamePin, this.hostId]
+    );
+  }
+}
+
 async function gameExists(gamePin) {
   let data = await db.first("Select gamePin From Games Where gamePin=?", [
     gamePin
@@ -42,5 +59,6 @@ async function gameExists(gamePin) {
 
 module.exports = {
   User: User,
+  Game: Game,
   gameExists: gameExists
 };

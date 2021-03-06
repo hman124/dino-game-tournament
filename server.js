@@ -14,7 +14,13 @@ app.get("/", (request, response) => {
   response.sendFile(`${__dirname}/views/index.html`);
 });
 
-app.get("/api/newGame", (req, res) => {});
+app.get("/api/newGame", (req, res) => {
+  let user = new users.User(req.query.user);
+  user.insertDb();
+  let game = new users.Game(user);
+  game.insertDb();
+  res.send(game);
+});
 
 app.get("/api/newUser", async (req, res) => {
   //let exists = await users.gameExists(req.query.gamePin);
