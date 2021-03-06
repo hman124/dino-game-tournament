@@ -39,7 +39,7 @@ app.get("/api/Listdb", async (req, res) => {
   res.send(data);
 });
 
-app.get("/api/Listdb", async (req, res) => {
+app.get("/game/wait", async (req, res) => {
   let data = await db.list();
   res.send(data);
 });
