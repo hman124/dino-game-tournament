@@ -8,7 +8,6 @@ class User {
     this.currentGame = currentGame;
     db.first("Select numUsers From Games Where gamePin=?", [this.gamePin]).then(
       data => {
-        console.log(data);
         if (data.length) {
           this.gameUsers = data.numUsers;
         } else {
@@ -39,10 +38,10 @@ class Game {
       "Insert Into Games (hostId, gamePin, numUsers, isStarted) Values (?,?,0,false)",
       [this.hostId, this.gamePin]
     );
-    db.run(
-      "Update Users Set currentGame=? Where userId=?",
-      [this.gamePin, this.hostId]
-    );
+    db.run("Update Users Set currentGame=? Where userId=?", [
+      this.gamePin,
+      this.hostId
+    ]);
   }
 }
 
@@ -50,11 +49,8 @@ async function gameExists(gamePin) {
   let data = await db.first("Select gamePin From Games Where gamePin=?", [
     gamePin
   ]);
-  if (data.length) {
-    return true;
-  } else {
-    return false;
-  }
+  console.log(data);
+  return !!data.gamePin;
 }
 
 module.exports = {

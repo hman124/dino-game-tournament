@@ -23,8 +23,8 @@ app.get("/api/newGame", (req, res) => {
 });
 
 app.get("/api/newUser", async (req, res) => {
-  //let exists = await users.gameExists(req.query.gamePin);
-  var exists = true;
+  let exists = await users.gameExists(req.query.gamePin);
+  //var exists = true;
   if (exists) {
     let user = new users.User(req.query.user, req.query.gamePin);
     user.insertDb();
