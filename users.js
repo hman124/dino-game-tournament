@@ -53,6 +53,14 @@ async function gameExists(gamePin) {
   return !!data.gamePin;
 }
 
+async function gameState(gamePin) {
+  let data = await db.first("Select isStarted From Games Where gamePin=?", [
+    gamePin
+  ]);
+  console.log(data);
+  return !!parseInt(data.isStarted);
+}
+
 module.exports = {
   User: User,
   Game: Game,

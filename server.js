@@ -39,6 +39,11 @@ app.get("/api/Listdb", async (req, res) => {
   res.send(data);
 });
 
+app.get("/api/Listdb", async (req, res) => {
+  let data = await db.list();
+  res.send(data);
+});
+
 // listen for requests :)
 var listener = app.listen(process.env.PORT, () => {
   console.log(`Your app is listening on port ${listener.address().port}`);
