@@ -16,8 +16,9 @@ app.get("/api/newGame", (req, res) => {
   
 });
 
-app.get("/api/newUser", (req, res) => {
-  new users.User()
+app.get("/api/newUser", async (req, res) => {
+  let user = await new users.User();
+  res.send(user);
 });
 
 // listen for requests :)
