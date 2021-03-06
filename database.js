@@ -18,7 +18,9 @@ db.serialize(() => {
 });
 
 function dbAll(query, stmts) {
-  if(!stmts) { stmts = []; }
+  if (!stmts) {
+    stmts = [];
+  }
   return new Promise((res, rej) => {
     db.all(query, ...stmts, (err, rows) => {
       if (err) {
@@ -31,7 +33,9 @@ function dbAll(query, stmts) {
 }
 
 function dbRun(query, stmts) {
-  if(!stmts) { stmts = []; }
+  if (!stmts) {
+    stmts = [];
+  }
   return new Promise((res, rej) => {
     db.run(query, ...stmts, err => {
       if (err) {
@@ -44,14 +48,19 @@ function dbRun(query, stmts) {
 }
 
 function dbFirst(query, stmts) {
-  if(!stmts) { stmts = []; }
+  if (!stmts) {
+    stmts = [];
+  }
   return new Promise((res, rej) => {
     db.all(query, ...stmts, (err, rows) => {
-      if(rows) {
-        console.log(rows + " | " + rows.length);
-        res(rows);
-      } else {
-        res("nose");
+      if (err) {
+        rej(err);
+      } else if (rows) {
+        if (rows.length) {
+          res(rows[0]);
+        } else {
+          res([]);
+        }
       }
     });
   });

@@ -6,19 +6,21 @@ class User {
     this.userId = crypto.randomBytes(8).toString("hex");
     this.screenName = screenName;
     this.currentGame = currentGame;
-    db.first("Select numUsers From Games Where gamePin=?", [this.gamePin]).then(
-      data => {
-        console.log(data);
-        this.gameUsers = parseInt(data.numUsers);
-      }
-    );
+    if (this.currentGame) {
+      db.first("Select numUsers From Games Where gamePin=?", [
+        this.currentGame
+      ]).then(data => {
+        this.gameUsers = data.numUsers;
+        console.log(data.numUsers);
+      });
+    }
   }
   insertDb() {
     db.run(
       "Insert Into Users (userId, screenName, currentGame) Values (?,?,?)",
       [this.userId, this.screenName, this.currentGame]
     );
-    if (!!this.currentGame) {
+    if (this.currentGame) {
       db.run("Update Games Set numUsers=? Where gamePin=?", [
         this.gameUsers + 1,
         this.currentGame
