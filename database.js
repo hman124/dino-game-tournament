@@ -41,6 +41,22 @@ function dbRun(query, stmts) {
   });
 }
 
+function dbFirst(query, stmts) {
+  return new Promise((res, rej) => {
+    db.all(query, ...stmts, (err, rows) => {
+      if(err) {
+        rej(err);
+      } else {
+        if(rows.length) {
+          res(rows[0]);          
+        } else {
+          res([]);
+        }
+      }
+    })
+  });
+}
+
 module.exports = {
   run: dbRun,
   all: dbAll

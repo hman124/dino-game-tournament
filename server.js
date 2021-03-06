@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const fs = require("fs");
+const users = require("./users.js");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -13,6 +14,10 @@ app.get("/", (request, response) => {
 
 app.get("/api/newGame", (req, res) => {
   
+});
+
+app.get("/api/newUser", (req, res) => {
+  new users.User()
 });
 
 // listen for requests :)
