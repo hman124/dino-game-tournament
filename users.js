@@ -8,6 +8,7 @@ class User {
     this.currentGame = currentGame;
     db.first("Select numUsers From Games Where gamePin=?", [this.gamePin]).then(
       data => {
+        console.log(data);
         if (data.length) {
           this.gameUsers = data.numUsers;
         } else {
