@@ -24,6 +24,7 @@ app.get("/game/new", (req, res) => {
   let game = new users.Game(user);
   game.insertDb();
   res.cookie("userId", user.userId);
+  res.cookie("gamePin", game.gamePin);
   res.redirect(307, "/game/wait");
 });
 
@@ -34,6 +35,7 @@ app.get("/game/join", async (req, res) => {
     let user = new users.User(req.query.user, req.query.gamePin);
     user.insertDb();
     res.cookie("gamePin", user.currentGame);
+    res.cookie("userId", user.userId);
     res.redirect(307, "/game/wait");
   } else {
     res.send("Game Doesn't Exist");
@@ -46,14 +48,14 @@ app.get("/api/listdb", async (req, res) => {
 });
 
 app.get("/game/info", async (req, res) => {
-  res.send(req.cookie);
+  res.send(req.cookies);
 });
 
 app.get("/game/wait", async (req, res) => {
   let data = await users.gameState(req.cookies.gamePin);
   if (!data) {
-    var folderName = await users.getHost();
-    res.sendFile(__dirname + "/views/" + folderName + "/wait.html");
+    //var folderName = await users.getHost();
+    res.sendFile(__dirname + "/views/host/wait.html");
   } else {
     res.redirect(307, "/game/play");
   }
