@@ -5,6 +5,8 @@ const fs = require("fs");
 const users = require("./users.js");
 const db = require("./database.js");
 const cookieParser = require("cookie-parser");
+const http = require("http").createServer(app);
+const io = require("socket.io")(http);
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -12,16 +14,17 @@ app.use(bodyParser.json());
 
 app.use(express.static("public"));
 
-app.get("/", (request, response) => {
-  response.sendFile(`${__dirname}/views/index.html`);
+app.get("/", (req, res) => {
+  res.sendFile(`${__dirname}/views/index.html`);
 });
 
-app.get("/api/newGame", (req, res) => {
+app.get("/game/new", (req, res) => {
   let user = new users.User(req.query.user);
   user.insertDb();
   let game = new users.Game(user);
   game.insertDb();
-  res.send(game);
+  res.cookie("userId", user.userId);
+  res.redirect(307, "/game/wait");
 });
 
 app.get("/game/join", async (req, res) => {
@@ -42,11 +45,15 @@ app.get("/api/listdb", async (req, res) => {
   res.send(data);
 });
 
+app.get("/game/info", async (req, res) => {
+  res.send(req.cookie);
+});
+
 app.get("/game/wait", async (req, res) => {
   let data = await users.gameState(req.cookies.gamePin);
   if (!data) {
     var folderName = await users.getHost();
-    res.sendFile(__dirname + "/views/" + folderName + "/wait.html");  
+    res.sendFile(__dirname + "/views/" + folderName + "/wait.html");
   } else {
     res.redirect(307, "/game/play");
   }
@@ -62,10 +69,10 @@ app.get("/game/play", async (req, res) => {
 });
 
 app.get("/api/cleardb", async (req, res) => {
-db.run("Delete From Games Where 1");
+  db.run("Delete From Games Where 1");
   res.send("hi");
 });
-// listen for requests :)
-var listener = app.listen(process.env.PORT, () => {
+
+var listener = http.listen(process.env.PORT, () => {
   //console.log(`Your app is listening on port ${listener.address().port}`);
 });
