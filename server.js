@@ -54,8 +54,12 @@ app.get("/game/info", async (req, res) => {
 app.get("/game/wait", async (req, res) => {
   let data = await users.gameState(req.cookies.gamePin);
   if (!data) {
-    //var folderName = await users.getHost();
-    res.sendFile(__dirname + "/views/host/wait.html");
+    var userState = await users.getUser(req.cookies.userId);
+    if (userState.isHost) {
+      res.sendFile(__dirname + "/views/host/wait.html");
+    } else {
+      res.sendFile(__dirname + "/views/player/wait.html");
+    }
   } else {
     res.redirect(307, "/game/play");
   }

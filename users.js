@@ -8,9 +8,10 @@ class User {
     this.currentGame = currentGame;
   }
   insertDb() {
+    var isHost = !this.currentGame
     db.run(
-      "Insert Into Users (userId, screenName, currentGame) Values (?,?,?)",
-      [this.userId, this.screenName, this.currentGame]
+      "Insert Into Users (userId, screenName, currentGame, isHost) Values (?,?,?,?)",
+      [this.userId, this.screenName, this.currentGame, isHost]
     );
     if (this.currentGame) {
       console.log(typeof this.gameUsers);
@@ -52,12 +53,9 @@ async function gameState(gamePin) {
   return !!parseInt(data.isStarted);
 }
 
-async function isHost(userId, gamePin) {
-  let data = await db.first(
-    "Select * From Games Where hostId=? AND gamePin=?",
-    [userId, gamePin]
-  );
-  return !!data;
+async function getUser(userId) {
+  var userData = await db.first("Select * From Users Where userId=?", [userId]);
+  return userData;
 }
 
 module.exports = {

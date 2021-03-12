@@ -10,7 +10,7 @@ db.serialize(() => {
       "CREATE TABLE Games (gamePin TEXT, numUsers INT, hostId TEXT, isStarted BOOL)"
     );
     db.run(
-      "CREATE TABLE Users (userId TEXT, screenName TEXT, currentGame TEXT)"
+      "CREATE TABLE Users (userId TEXT, screenName TEXT, currentGame TEXT, isHost BOOL)"
     );
   } else {
   //  console.log("Database ready to go!");
