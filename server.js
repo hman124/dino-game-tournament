@@ -80,9 +80,10 @@ app.get("/api/cleardb", async (req, res) => {
 });
 
 io.on("connect", socket => {
-  socket.on("linkGame", gamePin => {
-    socket.join(gamePin);
-    socket.to(gamePin).emit("newUser", "Yes");
+  socket.on("linkGame", user => {
+    console.log(user);
+    socket.join(user[0]);
+    io.to(user[0]).emit("newUser", "Yes");
   });
 });
 

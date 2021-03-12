@@ -1,1 +1,28 @@
-You are not the host
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Waiting for game to start...</title>
+  </head>
+  <body>
+    <p>
+      You Are Not The Host
+    </p>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+      
+      socket.on("connect", () => {
+        fetch("/game/info")
+          .then(response => response.json())
+          .then(data => {
+          console.log("hi");
+            socket.emit("linkGame", [data.gamePin, data.userId]);
+          });
+      });
+
+      socket.on("newUser", () => {
+        alert("yes");
+      });
+    </script>
+  </body>
+</html>

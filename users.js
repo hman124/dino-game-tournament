@@ -8,7 +8,7 @@ class User {
     this.currentGame = currentGame;
   }
   insertDb() {
-    var isHost = !!!this.currentGame;
+    var isHost = !this.currentGame;
     db.run(
       "Insert Into Users (userId, screenName, currentGame, isHost) Values (?,?,?,?)",
       [this.userId, this.screenName, this.currentGame, isHost]
