@@ -79,6 +79,13 @@ app.get("/api/cleardb", async (req, res) => {
   res.send("hi");
 });
 
+io.on("connect", socket => {
+  socket.on("linkGame", gamePin => {
+    socket.join(gamePin);
+    socket.to(gamePin).emit("newUser", "Yes");
+  });
+});
+
 var listener = http.listen(process.env.PORT, () => {
   //console.log(`Your app is listening on port ${listener.address().port}`);
 });

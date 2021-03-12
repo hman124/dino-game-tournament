@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>Waiting for game to start...</title>
@@ -8,6 +8,14 @@
       You Are The Host
     </p>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/wait.js"></script>
+    <script>
+      var socket = io();
+
+      fetch("/game/info")
+        .then(response => response.json())
+        .then(data => {
+          socket.emit("connectGame", data.gamePin);
+        });
+    </script>
   </body>
 </html>
